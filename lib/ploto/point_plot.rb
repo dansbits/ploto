@@ -28,7 +28,8 @@ module Ploto
 
       svg.add_element(@y_axis.render)
       svg.add_element(@x_axis.render(@y_axis.pixel_width + LEFT_PADDING, @y_axis.pixel_height + TOP_PADDING))
-      add_points(svg)
+      plot_area = Point::PlotArea.new(@x_axis, @y_axis)
+      svg.add_element(plot_area.render(LEFT_PADDING + @y_axis.pixel_width, TOP_PADDING, @x, @y))
 
       output = ''
       plot.write(output)

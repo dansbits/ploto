@@ -12,7 +12,7 @@ module Ploto
     end
 
     def pixel_width
-      max_characters = labels.map { |label| label[:label].to_s.length }.max * 10 + 3
+      labels.map { |label| label[:label].to_s.length }.max * 10 + 3
     end
 
     def pixel_position(value)

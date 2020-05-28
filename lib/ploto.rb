@@ -1,10 +1,11 @@
 require "rexml/document"
 
 require "ploto/version"
-require_relative "ploto/plot"
-require_relative "ploto/point_plot"
-require_relative "ploto/numeric_axis"
-
+require "ploto/plot"
+require "ploto/point_plot/plot_area"
+require "ploto/point_plot"
+require "ploto/vertical_axis"
+require "ploto/horizontal_axis"
 module Ploto
   class Error < StandardError; end
   # Your code goes here...
