@@ -26,7 +26,14 @@ module Ploto
 
     def render(x,y)
       container = REXML::Element.new 'svg'
-      container.add_attributes({'x' => x, 'y' => y, 'width' => @pixel_width, 'height' => 20, 'overflow' => 'visible'})
+      container.add_attributes({
+        'x' => x,
+        'y' => y,
+        'width' => @pixel_width,
+        'height' => 20,
+        'overflow' => 'visible',
+        'class' => 'horizontal-axis'
+      })
       container.add_element(
         'line', 
         {

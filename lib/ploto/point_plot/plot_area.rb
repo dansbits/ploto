@@ -14,7 +14,8 @@ module Ploto
             'y' => y_position,
             'width' => @x_axis.pixel_width,
             'height' => @y_axis.pixel_height,
-            'overflow' => 'visible'
+            'overflow' => 'visible',
+            'class' => 'plot-area'
           }
         )
 

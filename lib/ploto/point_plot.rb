@@ -14,7 +14,7 @@ module Ploto
       @x_axis = HorizontalAxis.new(@x.min, @x.max, @canvas_width - LEFT_PADDING - RIGHT_PADDING - @y_axis.pixel_width)
     end
 
-    def to_s
+    def render
       plot = REXML::Document.new
       svg = plot.add_element(
         'svg', 
