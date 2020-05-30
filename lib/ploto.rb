@@ -1,7 +1,6 @@
 require "rexml/document"
 
 require "ploto/version"
-require "ploto/plot"
 require "ploto/point_plot/plot_area"
 require "ploto/point_plot"
 require "ploto/vertical_axis"
