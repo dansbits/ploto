@@ -48,5 +48,9 @@ module Ploto
       end
     end
 
+    def to_iruby
+      ["text/html", render]
+    end
+
   end
 end
