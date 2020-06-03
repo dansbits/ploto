@@ -61,9 +61,9 @@ module Ploto
           "y2" => @pixel_height
         }
       )
-
-      axis_label_offset = label ? CHARACTER_HEIGHT + LABEL_PADDING : 0
-
+      
+      axis_label_offset = self.label ? CHARACTER_HEIGHT + LABEL_PADDING : 0
+      
       labels.each do |tick_label|
         y_position = @pixel_height - tick_label[:pixel_position]
         el = container.add_element('text', "class" => "tick-label", 'x' => axis_label_offset, 'y' => y_position + 5)
@@ -81,7 +81,7 @@ module Ploto
         )
       end
 
-      if label
+      if self.label
         container.add_element(axis_label)
       end
 

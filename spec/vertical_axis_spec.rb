@@ -26,7 +26,7 @@ module Ploto
     describe "#render" do
       let(:axis) { VerticalAxis.new(0, 5, pixel_height: 100) }
 
-      it "renders an SVG with axis line, tick marks, and tick labels" do
+      it "renders an SVG with axis line tick marks, and tick labels" do
         xml = axis.render
         root = xml.root
         expect(root.name).to eq 'svg'
@@ -42,6 +42,21 @@ module Ploto
         expect(root.get_elements("//line[@class='axis-line']").length).to eq 1
         expect(root.get_elements("//line[@class='tick-mark']").length).to eq 5
         expect(root.get_elements("//text[@class='tick-label']").length).to eq 5
+      end
+
+      context "with an axis label" do
+        before { axis.label = 'Foo' }
+
+        it "renders the label and offsets the other elements" do
+          xml = axis.render
+          root = xml.root
+
+          expect(root.get_elements("//text[@class='axis-label']").length).to eq 1
+          label = root.get_elements("//text[@class='axis-label']")[0]
+          expect(label.text).to eq 'Foo'
+          tick_label = root.get_elements("//text[@class='tick-label']")[0]
+          expect(tick_label[:x].to_f).to eq VerticalAxis::CHARACTER_HEIGHT + VerticalAxis::LABEL_PADDING
+        end
       end
     end
   end
