@@ -7,6 +7,7 @@ module Ploto
     TICK_PADDING = 3
     LABEL_TOP_PADDING = 10
     
+    attr_accessor :label
     attr_reader :pixel_width
 
     def initialize(min_value, max_value, label: nil, pixel_width: nil)
@@ -56,11 +57,12 @@ module Ploto
       container.add_element(
         'line', 
         {
+          "class" => "axis-line",
           "style" => "stroke: #000000;",
           "stroke-width" => "1",
           "x1" => 0,
           "y1" => 0,
-          "x2" => pixel_width,
+          "x2" => @pixel_width,
           "y2" => 0
         }
       )
@@ -72,12 +74,20 @@ module Ploto
 
         label_width = tick_label[:label].to_s.length * CHARACTER_WIDTH
         text_position = x_position - (label_width / 2)
-        el = container.add_element('text', 'x' => text_position, 'y' => TICK_HEIGHT + TICK_PADDING + CHARACTER_HEIGHT / 2.0)
+        el = container.add_element(
+          'text', 
+          {
+            'x' => text_position, 
+            'y' => TICK_HEIGHT + TICK_PADDING + CHARACTER_HEIGHT / 2.0,
+            "class" => "tick-label"
+          }
+        )
         el.text = tick_label[:label]
 
         container.add_element(
           'line', 
           {
+            'class' => "tick-mark",
             'style' => "stroke: #000000; stroke-width: 1px;",
             'x1' => x_position,
             'y1' => 0,
@@ -88,9 +98,16 @@ module Ploto
       end
 
       if @label
-        el = container.add_element('text', 'x' => '50%', 'y' => TICK_HEIGHT + TICK_PADDING + CHARACTER_HEIGHT + LABEL_TOP_PADDING, 'dx' => -(CHARACTER_WIDTH * @label.length) / 2.0)
+        el = container.add_element(
+          'text',
+          {
+            'class' => 'axis-label',
+            'x' => '50%', 
+            'y' => TICK_HEIGHT + TICK_PADDING + CHARACTER_HEIGHT + LABEL_TOP_PADDING, 
+            'dx' => -(CHARACTER_WIDTH * @label.length) / 2.0
+          }
+        )
         el.text = @label
-        container.add_element(el)
       end
 
       container
