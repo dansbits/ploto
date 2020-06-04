@@ -5,16 +5,20 @@ module Ploto
     LEFT_PADDING=10
     RIGHT_PADDING=10
 
+    attr_accessor :x_label, :y_label
+
     def initialize(x, y)
       @canvas_width = 700
       @canvas_height = 400
       @x = x
       @y = y
-      @y_axis = VerticalAxis.new(@y.min, @y.max, @canvas_height - TOP_PADDING - BOTTOM_PADDING)
-      @x_axis = HorizontalAxis.new(@x.min, @x.max, @canvas_width - LEFT_PADDING - RIGHT_PADDING - @y_axis.pixel_width)
     end
 
     def render
+      x_axis = HorizontalAxis.new(@x.min, @x.max, label: x_label)
+      y_axis = VerticalAxis.new(@y.min, @y.max, pixel_height: @canvas_height - TOP_PADDING - BOTTOM_PADDING - x_axis.pixel_height, label: y_label)
+      x_axis.pixel_width = @canvas_width - LEFT_PADDING - RIGHT_PADDING - y_axis.pixel_width
+
       plot = REXML::Document.new
       svg = plot.add_element(
         'svg', 
@@ -26,26 +30,14 @@ module Ploto
         }
       )
 
-      svg.add_element(@y_axis.render)
-      svg.add_element(@x_axis.render(@y_axis.pixel_width + LEFT_PADDING, @y_axis.pixel_height + TOP_PADDING))
-      plot_area = Point::PlotArea.new(@x_axis, @y_axis)
-      svg.add_element(plot_area.render(LEFT_PADDING + @y_axis.pixel_width, TOP_PADDING, @x, @y))
+      svg.add_element(y_axis.render)
+      svg.add_element(x_axis.render(y_axis.pixel_width + LEFT_PADDING, TOP_PADDING + y_axis.pixel_height))
+      plot_area = Point::PlotArea.new(x_axis, y_axis)
+      svg.add_element(plot_area.render(LEFT_PADDING + y_axis.pixel_width, TOP_PADDING, @x, @y))
 
       output = ''
       plot.write(output)
       output
-    end
-
-    def add_points(svg)
-      @x.each_with_index do |value, index|
-        svg.add_element(
-          'circle',
-          'cx' => LEFT_PADDING + @y_axis.pixel_width + @x_axis.pixel_position(value), 
-          'r'=>"3",
-          'cy' => @canvas_height - BOTTOM_PADDING - @y_axis.pixel_position(@y[index]),
-          'fill' => '#6CD4FF' 
-        )
-      end
     end
 
     def to_iruby
