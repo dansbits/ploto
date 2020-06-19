@@ -19,15 +19,22 @@ module Ploto
           }
         )
 
-        x_vector.each_with_index do |value, index|
-          container.add_element(
-            'circle',
-            'cx' => @x_axis.pixel_position(value), 
-            'r'=>"3",
-            'cy' => @y_axis.pixel_height - @y_axis.pixel_position(y_vector[index]),
-            'fill' => '#6CD4FF' 
-          )
+        nil_count = 0
+        x_vector.each_with_index do |x_value, index|
+          y_value = y_vector[index]
+          if x_value.nil? || y_value.nil?
+            nil_count += 1
+          else
+            container.add_element(
+              'circle',
+              'cx' => @x_axis.pixel_position(x_value), 
+              'r'=>"3",
+              'cy' => @y_axis.pixel_height - @y_axis.pixel_position(y_vector[index]),
+              'fill' => '#6CD4FF' 
+            )
+          end
         end
+        warn("Warning: #{nil_count} points were not rendered due to missing values.") if nil_count > 0
 
         container
       end

@@ -31,6 +31,16 @@ module Ploto
         expect(root.get_elements("//svg[@class='plot-area']").length).to eq 1
         expect(root.get_elements("//svg[@class='plot-area']/circle").length).to eq 5
       end
+
+      context "when there are missing values" do
+        let(:x) { [1, nil, 3, nil, 4, 5] }
+
+        it "does not render the points with missing data and warns the user" do
+          xml_string = plot.render
+          xml = REXML::Document.new(xml_string)
+          expect(xml.get_elements("//svg[@class='plot-area']/circle").length).to eq 3
+        end
+      end
     end
   end
 end

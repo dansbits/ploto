@@ -15,8 +15,8 @@ module Ploto
     end
 
     def render
-      x_axis = HorizontalAxis.new(@x.min, @x.max, label: x_label)
-      y_axis = VerticalAxis.new(@y.min, @y.max, pixel_height: @canvas_height - TOP_PADDING - BOTTOM_PADDING - x_axis.pixel_height, label: y_label)
+      x_axis = initialize_x_axis(@x)
+      y_axis = VerticalAxis.new(@y.compact.min, @y.compact.max, pixel_height: @canvas_height - TOP_PADDING - BOTTOM_PADDING - x_axis.pixel_height, label: y_label)
       x_axis.pixel_width = @canvas_width - LEFT_PADDING - RIGHT_PADDING - y_axis.pixel_width
 
       plot = REXML::Document.new
@@ -38,6 +38,14 @@ module Ploto
       output = ''
       plot.write(output)
       output
+    end
+
+    def initialize_x_axis(x)
+      if x.all? { |item| item.is_a?(Numeric) || item.nil? }
+        Axes::NumericHorizontalAxis.new(@x.compact.min, @x.compact.max, label: x_label)
+      elsif x.all? { |value| value.is_a?(String) || value.nil? }
+        Axes::CategoricalHorizontalAxis.new(@x.compact.uniq, label: x_label)
+      end
     end
 
     def to_iruby
