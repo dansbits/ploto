@@ -43,11 +43,7 @@ module Ploto
     end
 
     def initialize_x_axis(x)
-      if x.all? { |item| item.is_a?(Numeric) || item.nil? }
-        Axes::NumericHorizontalAxis.new(@x.compact.min, @x.compact.max, label: x_label)
-      elsif x.all? { |value| value.is_a?(String) || value.nil? }
-        Axes::CategoricalHorizontalAxis.new(@x.compact.uniq, label: x_label)
-      end
+      Axes::CategoricalHorizontalAxis.new(@x.compact.uniq, label: x_label)
     end
 
     def to_iruby
